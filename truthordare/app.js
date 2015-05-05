@@ -6,14 +6,20 @@ var options = {
     ca: fs.readFileSync('/etc/ssl/server.ca.crt')
 };
 
-var quotes = [];
-quotes.push("What personality traits would cause you to end a friendship?");
-quotes.push("Have you ever lied to your best friend?  If so, describe what happened.");
-quotes.push("How long have you gone without showering?");
+var truths = [];
+truths.push("What personality traits would cause you to end a friendship?");
+truths.push("Have you ever lied to your best friend?  If so, describe what happened.");
+truths.push("How long have you gone without showering?");
+var dares = [];
+dares.push("Put on a blindfold and slow dance with a player. See if you can guess who it is by touch alone.");
+dares.push("Put lipstick on another player but you are not allowed to use your hands.");
+dares.push("Ask the neighbors to borrow a cup of sugar");
 
 
-function getRandomQuote() {
-    return quotes[Math.floor(Math.random() * quotes.length)];
+function getRandomTruth() {
+    return truths[Math.floor(Math.random() * truths.length)];
+function getRandomDare() {
+    return dares[Math.floor(Math.random() * dares.length)];
 }
 
 
@@ -40,7 +46,18 @@ https.createServer(options, function(req, res) {
             console.log('JSON', theRequest.request);
             if (typeof theRequest.request.intent !== 'undefined') {
                 choice = theRequest.request.intent.slots.Choice.value;
-                echoResponse.response.outputSpeech.text = "you said " + choice;
+                if(choice === "truth"){
+                truth = getRandomTruth();
+                echoResponse.response.outputSpeech.text = truth;
+                echoResponse.response.shouldEndSession.text = "true";
+                    }
+                if(choice === "dare"){
+                truth = getRandomDare();
+                echoResponse.response.outputSpeech.text = dare;
+                echoResponse.response.shouldEndSession.text = "true";
+                }
+                
+                // echoResponse.response.outputSpeech.text = "you said " + choice;
                 // echoResponse.response.card = {}
                 // echoResponse.response.card.type = "PlainText";
                 // echoResponse.response.card.title = choice;
@@ -62,4 +79,4 @@ https.createServer(options, function(req, res) {
         res.writeHead(200);
         res.end(myResponse);
     }
-}).listen(xxxx); //Put number in the 3000 range for testing and 443 for production
+}).listen(3012); //Put number in the 3000 range for testing and 443 for production
